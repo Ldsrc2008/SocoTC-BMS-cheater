@@ -53,7 +53,9 @@ void after_received(void) {
         //   Serial.println("controller query");
       }// end of if DA
       if (returned_array[2] == 0x5A) { // BMS query message
-        // Serial.println("BMS query");
+        Serial.println("BMS query");
+        Serial.write(testing_BMS_return, sizeof(testing_BMS_return));
+
         digitalWrite(DE_RE, HIGH);
         delay(3);
         Master.write(testing_BMS_return, sizeof(testing_BMS_return));
