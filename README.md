@@ -16,3 +16,37 @@ Tested result: It does tell the system what I want it to be, I use a VR to chang
 
 I found this git, who has more info than I have: https://github.com/stprograms/SuperSoco485Monitor/tree/main
 I will do a fork from this one, to do more things I need.
+## Decoded telegrams
+The following telegrams and packages of read responses are already decoded.
+
+### BMS Status (Read Response 0xAA5A)
+
+| Byte (len=10) |    0    |   1   |   2   |   3    |   4    |   5    |   6   |   7   |    8     |    9     |
+| ------------- | :-----: | :---: | :---: | :----: | :----: | :----: | :---: | :---: | :------: | :------: |
+|               | Voltage |  SoC  | Temp  | Charge | CycleH | CycleL |   ?   |   ?   | VBreaker | Charging |
+
+#### Description of the variables
+| Variable   | Description                                  | Unit                                                                                              | Data Type     |
+| ---------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------- |
+| Voltage    | current Voltage of the Battery in V          | Volts[V]                                                                                          | unsigned byte |
+| SoC        | State of Charge in %                         | Percent [%]                                                                                       | unsigned byte |
+| Temp       | current temperatur of the BMS                | Degree C [°C]                                                                                     | signed byte   |
+| Charge     | current charging or discharging current in A | Ampere [A]                                                                                        | signed byte   |
+| Cycle[H/L] | Number of loading cycles                     |                                                                                                   | unsigned word |
+| VBreaker   |                                              | 0 = OK<br>1 = bms stopped charge<br>2 = too high charge current<br>4 = too high discharge current | unsigned byte |
+| Charging   | Battery is currently charging                | 1 = charge<br>4 = discharge                                                                       | unsigned byte |
+
+### ECU Status (Read Response 0xAADA)
+| Byte (len=10) |   0   |    1     |    2     |   3    |   4    |    5     |   6   |   7   |    8    |   9   |
+| ------------- | :---: | :------: | :------: | :----: | :----: | :------: | :---: | :---: | :-----: | :---: |
+|               | Mode  | CurrentH | CurrentL | SpeedH | SpeedL | ECU Temp |   ?   |   ?   | Parking |   ?   |
+
+
+#### Description of the variables
+| Variable      | Description         | Unit                | Data Type     |
+| ------------- | ------------------- | ------------------- | ------------- |
+| Mode          | Speed Mode          | 1 - 3               | unsigned byte |
+| Current [H/L] | Current consumption | [mA] ?              | unsigned word |
+| Speed [H/L]   | Current speed       | [km/h] ?            | unsigned word |
+| ECU Temp      | Temperature of ECU  | Degree Celcius [°C] | signed byte   |
+| Parking       | Parking mode        | 2 = on<br>1 = off   | unsigned byte |
